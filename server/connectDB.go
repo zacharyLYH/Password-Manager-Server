@@ -14,7 +14,7 @@ import (
 var db *mongo.Database
 
 func connect() {
-	viper.SetConfigFile("../.env")
+	viper.SetConfigFile("ENV")
 	viper.ReadInConfig()
 	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("%v", viper.Get("MONGO_URI"))))
 	if err != nil {
