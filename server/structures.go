@@ -1,10 +1,7 @@
-package main
+package server
 
 import (
 	"crypto/rsa"
-	"fmt"
-	"log"
-	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -55,30 +52,11 @@ type AllPasswords struct {
 var C ServerCreds
 var TestSymKey []byte
 
-func main() {
+func InitializeStructs() {
 	C = ServerCreds{
-		extractPubKey(pwd() + "/serverPublic.pem"),
-		extractPrivKey(pwd() + "/serverPrivate.pem"),
+		ExtractPubKey(Pwd() + "/server/serverPublic.pem"),
+		ExtractPrivKey(Pwd() + "/server/serverPrivate.pem"),
 		[]byte{105, 86, 89, 70, 118, 101, 121, 90, 48, 76, 57, 69, 48, 116, 102, 52, 69, 75, 110, 106, 97, 65, 98, 110, 83, 105, 89, 84, 71, 84, 48, 97},
 	}
-	connect()
-	TestSymKey = generateSymKey(32)
-	//add listeners
-	mux := http.NewServeMux()
-	mux.HandleFunc("/askForSym", askForSym)
-	mux.HandleFunc("/checkAESConnection", checkAESConnection)
-	mux.HandleFunc("/testRSAConnection", testRSAConnection)
-	mux.HandleFunc("/signup", signup)
-	mux.HandleFunc("/checkIfUsernameAvailable", checkIfUsernameAvailable)
-	mux.HandleFunc("/login", login)
-	mux.HandleFunc("/clearSymMap", clearSymMap)
-	mux.HandleFunc("/createPasswordEntry", createPasswordEntry)
-	mux.HandleFunc("/getAllPasswords", getAllPasswords)
-	mux.HandleFunc("/getOnePassword", getOnePassword)
-	mux.HandleFunc("/updatePassword", updatePassword)
-	mux.HandleFunc("/deletePassword", deletePassword)
-	fmt.Printf("Starting server at port 8000\n")
-	if err := http.ListenAndServe(":8000", mux); err != nil {
-		log.Fatal(err)
-	}
+	TestSymKey = GenerateSymKey(32)
 }

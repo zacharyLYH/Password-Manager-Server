@@ -1,22 +1,17 @@
-package main
+package server
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"time"
-
-	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var db *mongo.Database
+var Db *mongo.Database
 
-func connect() {
-	viper.SetConfigFile("../.env")
-	viper.ReadInConfig()
-	client, err := mongo.NewClient(options.Client().ApplyURI(fmt.Sprintf("%v", viper.Get("MONGO_URI"))))
+func Connect(uri string) {
+	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,5 +21,5 @@ func connect() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db = client.Database("learning-mongo-go")
+	Db = client.Database("learning-mongo-go")
 }

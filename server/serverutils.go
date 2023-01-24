@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"crypto"
@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-func pwd() string {
+func Pwd() string {
 	mydir, err := os.Getwd()
 	if err != nil {
 		fmt.Println(err)
@@ -26,7 +26,7 @@ func pwd() string {
 	return mydir
 }
 
-func generateSymKey(length int) []byte {
+func GenerateSymKey(length int) []byte {
 	var seededRand *mathRand.Rand = mathRand.New(
 		mathRand.NewSource(time.Now().UnixNano()))
 	const charset = "abcdefghijklmnopqrstuvwxyz" +
@@ -38,7 +38,7 @@ func generateSymKey(length int) []byte {
 	return b
 }
 
-func extractPubKey(location string) *rsa.PublicKey {
+func ExtractPubKey(location string) *rsa.PublicKey {
 	key, err := ioutil.ReadFile(location)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +48,7 @@ func extractPubKey(location string) *rsa.PublicKey {
 	return parseResult.(*rsa.PublicKey)
 }
 
-func extractPrivKey(location string) *rsa.PrivateKey {
+func ExtractPrivKey(location string) *rsa.PrivateKey {
 	key, err := ioutil.ReadFile(location)
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +58,7 @@ func extractPrivKey(location string) *rsa.PrivateKey {
 	return parseResult
 }
 
-func decryptRSA(encryptedBytes []byte, privateKey *rsa.PrivateKey) []byte {
+func DecryptRSA(encryptedBytes []byte, privateKey *rsa.PrivateKey) []byte {
 	decryptedBytes, err := privateKey.Decrypt(nil, encryptedBytes, &rsa.OAEPOptions{Hash: crypto.SHA256})
 	if err != nil {
 		panic(err)
@@ -66,7 +66,7 @@ func decryptRSA(encryptedBytes []byte, privateKey *rsa.PrivateKey) []byte {
 	return decryptedBytes
 }
 
-func encryptRSA(publicKey *rsa.PublicKey, payload []byte) []byte {
+func EncryptRSA(publicKey *rsa.PublicKey, payload []byte) []byte {
 	encryptedBytes, err := rsa.EncryptOAEP(
 		sha256.New(),
 		crytpRand.Reader,
@@ -79,7 +79,7 @@ func encryptRSA(publicKey *rsa.PublicKey, payload []byte) []byte {
 	return encryptedBytes
 }
 
-func encryptAES(text, key []byte) []byte {
+func EncryptAES(text, key []byte) []byte {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		fmt.Println(err)
@@ -95,7 +95,7 @@ func encryptAES(text, key []byte) []byte {
 	return gcm.Seal(nonce, nonce, text, nil)
 }
 
-func decryptAES(key, ciphertext []byte) string {
+func DecryptAES(key, ciphertext []byte) string {
 	c, err := aes.NewCipher(key)
 	if err != nil {
 		fmt.Println(err)

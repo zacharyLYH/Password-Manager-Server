@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func insertOne(collection *mongo.Collection, parameters, values []string) *mongo.InsertOneResult {
+func InsertOne(collection *mongo.Collection, parameters, values []string) *mongo.InsertOneResult {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	data := make(bson.M)
@@ -24,7 +24,7 @@ func insertOne(collection *mongo.Collection, parameters, values []string) *mongo
 	return result
 }
 
-func isAvailableUsername(collection *mongo.Collection, try string) bool {
+func IsAvailableUsername(collection *mongo.Collection, try string) bool {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := collection.FindOne(ctx, bson.M{"AccountUsername": try}).Err(); err == mongo.ErrNoDocuments {
@@ -33,7 +33,7 @@ func isAvailableUsername(collection *mongo.Collection, try string) bool {
 	return false
 }
 
-func queryByField(collection *mongo.Collection, parameters, values []string) UserData {
+func QueryByField(collection *mongo.Collection, parameters, values []string) UserData {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	data := make(bson.M)
@@ -47,7 +47,7 @@ func queryByField(collection *mongo.Collection, parameters, values []string) Use
 	return ret
 }
 
-func queryByID(collection *mongo.Collection, objID primitive.ObjectID) UserData {
+func QueryByID(collection *mongo.Collection, objID primitive.ObjectID) UserData {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var ret UserData
@@ -57,7 +57,7 @@ func queryByID(collection *mongo.Collection, objID primitive.ObjectID) UserData 
 	return ret
 }
 
-func deleteDocument(collection *mongo.Collection, parameters, values []string) *mongo.DeleteResult {
+func DeleteDocument(collection *mongo.Collection, parameters, values []string) *mongo.DeleteResult {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	data := make(bson.M)
@@ -71,7 +71,7 @@ func deleteDocument(collection *mongo.Collection, parameters, values []string) *
 	return result
 }
 
-func updateDocument(collection *mongo.Collection, change, changeTo string, objID primitive.ObjectID) *mongo.UpdateResult {
+func UpdateDocument(collection *mongo.Collection, change, changeTo string, objID primitive.ObjectID) *mongo.UpdateResult {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	result, err := collection.UpdateOne(
@@ -87,7 +87,7 @@ func updateDocument(collection *mongo.Collection, change, changeTo string, objID
 	return result
 }
 
-func retrieveAllPass(collection *mongo.Collection, username string) []AllPasswords {
+func RetrieveAllPass(collection *mongo.Collection, username string) []AllPasswords {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	var ret []AllPasswords
