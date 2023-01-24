@@ -14,6 +14,7 @@ var URI string
 func main() {
 	viper.SetConfigFile("ENV")
 	viper.ReadInConfig()
+	viper.AutomaticEnv()
 	w.Connect(fmt.Sprintf("%v", viper.Get("MONGO_URI")))
 	w.InitializeStructs()
 	//add listeners
