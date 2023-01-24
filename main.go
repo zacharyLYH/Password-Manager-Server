@@ -15,7 +15,6 @@ func main() {
 	viper.SetConfigFile("ENV")
 	viper.ReadInConfig()
 	viper.AutomaticEnv()
-	fmt.Println(fmt.Sprintf("%v", viper.Get("PORT")))
 	w.Connect(fmt.Sprintf("%v", viper.Get("MONGO_URI")))
 	w.InitializeStructs()
 	//add listeners
@@ -32,8 +31,8 @@ func main() {
 	mux.HandleFunc("/getOnePassword", w.GetOnePassword)
 	mux.HandleFunc("/updatePassword", w.UpdatePassword)
 	mux.HandleFunc("/deletePassword", w.DeletePassword)
-	fmt.Printf("Starting server at port 8000\n")
-	if err := http.ListenAndServe(":8000", mux); err != nil {
+	fmt.Printf("Starting server at port %s\n", fmt.Sprintf("%v", viper.Get("PORT")))
+	if err := http.ListenAndServe(":"+fmt.Sprintf("%v", viper.Get("PORT")), mux); err != nil {
 		log.Fatal(err)
 	}
 }
