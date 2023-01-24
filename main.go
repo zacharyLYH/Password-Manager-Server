@@ -12,7 +12,7 @@ import (
 var URI string
 
 func main() {
-	viper.SetConfigFile(".env")
+	viper.SetConfigFile("ENV")
 	viper.ReadInConfig()
 	w.Connect(fmt.Sprintf("%v", viper.Get("MONGO_URI")))
 	w.InitializeStructs()
