@@ -15,6 +15,7 @@ func main() {
 	viper.SetConfigFile("ENV")
 	viper.ReadInConfig()
 	viper.AutomaticEnv()
+	fmt.Println(fmt.Sprintf("%v", viper.Get("PORT")))
 	w.Connect(fmt.Sprintf("%v", viper.Get("MONGO_URI")))
 	w.InitializeStructs()
 	//add listeners
